@@ -3,11 +3,11 @@ import { Box, Typography, FormControl, FormHelperText, TextField, TextareaAutosi
 import { FormProps } from 'interfaces/common';
 import CustomButton from './CustomButton';
 
-const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, onFinishHandler, propertyImage }: FormProps) => {
+const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, onFinishHandler, stockImage }: FormProps) => {
   return (
     <Box>
       <Typography fontSize={25} fontWeight={700} color="#11142d">
-        {type} a Property
+        {type} a Stock
       </Typography>
 
       <Box mt={2.5} borderRadius="15px" padding="20px" bgcolor="#fcfcfc">
@@ -15,14 +15,25 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
         onSubmit={handleSubmit(onFinishHandler)}
         >
           <FormControl>
-            <FormHelperText sx={{ fontWeight: 500, margin: '10px 0', fontSize: 16, color: '#11142d'}}>Enter property name</FormHelperText>
+            <FormHelperText sx={{ fontWeight: 500, margin: '10px 0', fontSize: 16, color: '#11142d'}}>Enter stock code</FormHelperText>
             <TextField 
               fullWidth
               required
               id="outlined-basic"
               color="info"
               variant="outlined"
-              {...register('title', { required: true})}
+              {...register('kode', { required: true})}
+            />
+          </FormControl>
+          <FormControl>
+            <FormHelperText sx={{ fontWeight: 500, margin: '10px 0', fontSize: 16, color: '#11142d'}}>Enter stock name</FormHelperText>
+            <TextField 
+              fullWidth
+              required
+              id="outlined-basic"
+              color="info"
+              variant="outlined"
+              {...register('item', { required: true})}
             />
           </FormControl>
           <FormControl>
@@ -45,7 +56,7 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
                 fontSize: 16,
                 color: '#11142d' 
               }}>
-                Select Property Type
+                Select Stock Category
               </FormHelperText>
               <Select
                 variant="outlined"
@@ -54,7 +65,7 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
                 required
                 inputProps={{ 'aria-label': 'Without label' }}
                 defaultValue="aparment"
-                {...register('propertyType', { required: true})}
+                {...register('category', { required: true})}
               >
                 <MenuItem value="apartment">Apartment</MenuItem>
                 <MenuItem value="villa">Villa</MenuItem>
@@ -67,7 +78,7 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
               </Select>
             </FormControl>
             <FormControl>
-            <FormHelperText sx={{ fontWeight: 500, margin: '10px 0', fontSize: 16, color: '#11142d'}}>Enter property price</FormHelperText>
+            <FormHelperText sx={{ fontWeight: 500, margin: '10px 0', fontSize: 16, color: '#11142d'}}>Enter stock actual</FormHelperText>
             <TextField 
               fullWidth
               required
@@ -75,7 +86,7 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
               color="info"
               type="number"
               variant="outlined"
-              {...register('price', { required: true})}
+              {...register('actual', { required: true})}
             />
           </FormControl>
           </Stack>
@@ -94,7 +105,7 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
 
           <Stack direction="column" gap={1} justifyContent="center" mb={2}>
               <Stack direction="row" gap={2}>
-                <Typography color="#11142d" fontSize={16} fontWeight={500} my="10px">Property Photo</Typography>
+                <Typography color="#11142d" fontSize={16} fontWeight={500} my="10px">Stock Photo</Typography>
 
                 <Button component="label" sx={{ width: 'fit-content', color: "#2ed480", textTransform: 'capitalize', fontSize: 16}}>
                   Upload *
@@ -109,7 +120,7 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
                   />
                 </Button>
               </Stack>
-              <Typography fontSize={14} color="#808191" sx={{wordBreak: 'break-all'}} >{propertyImage?.name}</Typography>
+              <Typography fontSize={14} color="#808191" sx={{wordBreak: 'break-all'}} >{stockImage?.name}</Typography>
           </Stack>
 
           <CustomButton 

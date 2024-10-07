@@ -1,22 +1,24 @@
 import { BaseKey } from '@pankod/refine-core';
 
 export interface FormFieldProp {
-  title: string,
+  kode: string,
   labelName: string
 }
 
 export interface FormValues {
-    title: string,
+    kode: string,
+    item: string,
     description: string,
-    propertyType: string,
+    category: string,
     location: string,
-    price: number | undefined,
+    actual: number | undefined,
 }
 
-export interface PropertyCardProps {
+export interface StockCardProps {
   id?: BaseKey | undefined,
-  title: string,
+  kode: string,
+  item: string,
   location: string,
-  price: string,
+  actual: string,
   photo: string,
 }

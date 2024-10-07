@@ -12,7 +12,7 @@ function checkImage(url: any) {
   return img.width !== 0 && img.height !== 0;
 }
 
-const PropertyDetails = () => {
+const StockDetails = () => {
   const navigate = useNavigate();
   const { data: user } = useGetIdentity();
   const { queryResult } = useShow();
@@ -21,7 +21,7 @@ const PropertyDetails = () => {
 
   const { data, isLoading, isError } = queryResult;
 
-  const propertyDetails = data?.data ?? {};
+  const stockDetails = data?.data ?? {};
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -31,17 +31,17 @@ const PropertyDetails = () => {
     return <div>Something went wrong!</div>;
   }
 
-  const isCurrentUser = user.email === propertyDetails.creator.email;
+  const isCurrentUser = user.email === stockDetails.creator.email;
 
-  const handleDeleteProperty = () => {
-    const response = confirm('Are you sure you want to delete this property?');
+  const handleDeleteStock = () => {
+    const response = confirm('Are you sure you want to delete this stock?');
     if (response) {
       mutate({
-        resource: 'properties',
+        resource: 'stocks',
         id: id as string,
       }, {
         onSuccess: () => {
-          navigate('/properties');
+          navigate('/stocks');
         },
       });
     }
@@ -60,16 +60,16 @@ const PropertyDetails = () => {
 
         <Box flex={1} maxWidth={764}>
           <img
-            src={propertyDetails.photo}
-            alt="property_details-img"
+            src={stockDetails.photo}
+            alt="stock_details-img"
             height={546}
             style={{ objectFit: 'cover', borderRadius: '10px' }}
-            className="property_details-img"
+            className="stock_details-img"
           />
 
           <Box mt="15px">
             <Stack direction="row" justifyContent="space-between" flexWrap="wrap" alignItems="center">
-              <Typography fontSize={18} fontWeight={500} color="#11142D" textTransform="capitalize">{propertyDetails.propertyType}</Typography>
+              <Typography fontSize={18} fontWeight={500} color="#11142D" textTransform="capitalize">{stockDetails.category}</Typography>
               <Box>
                 {[1, 2, 3, 4, 5].map((item) => <Star key={`star-${item}`} sx={{ color: '#F2C94C' }} />)}
               </Box>
@@ -77,17 +77,17 @@ const PropertyDetails = () => {
 
             <Stack direction="row" flexWrap="wrap" justifyContent="space-between" alignItems="center" gap={2}>
               <Box>
-                <Typography fontSize={22} fontWeight={600} mt="10px" color="#11142D">{propertyDetails.title}</Typography>
+                <Typography fontSize={22} fontWeight={600} mt="10px" color="#11142D">{stockDetails.item}</Typography>
                 <Stack mt={0.5} direction="row" alignItems="center" gap={0.5}>
                   <Place sx={{ color: '#808191' }} />
-                  <Typography fontSize={14} color="#808191">{propertyDetails.location}</Typography>
+                  <Typography fontSize={14} color="#808191">{stockDetails.location}</Typography>
                 </Stack>
               </Box>
 
               <Box>
-                <Typography fontSize={16} fontWeight={600} mt="10px" color="#11142D">Price</Typography>
+                <Typography fontSize={16} fontWeight={600} mt="10px" color="#11142D">Actual</Typography>
                 <Stack direction="row" alignItems="flex-end" gap={1}>
-                  <Typography fontSize={25} fontWeight={700} color="#475BE8">${propertyDetails.price}</Typography>
+                  <Typography fontSize={25} fontWeight={700} color="#475BE8">${stockDetails.actual}</Typography>
                   <Typography fontSize={14} color="#808191" mb={0.5}>for one day</Typography>
                 </Stack>
               </Box>
@@ -96,7 +96,7 @@ const PropertyDetails = () => {
             <Stack mt="25px" direction="column" gap="10px">
               <Typography fontSize={18} color="#11142D">Description</Typography>
               <Typography fontSize={14} color="#808191">
-                {propertyDetails.description}
+                {stockDetails.description}
               </Typography>
             </Stack>
           </Box>
@@ -115,7 +115,7 @@ const PropertyDetails = () => {
 
             <Stack mt={2} justifyContent="center" alignItems="center" textAlign="center">
               <img
-                src={checkImage(propertyDetails.creator.avatar) ? propertyDetails.creator.avatar : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png"}
+                src={checkImage(stockDetails.creator.avatar) ? stockDetails.creator.avatar : "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png"}
                 alt="avatar"
                 width={90}
                 height={90}
@@ -123,7 +123,7 @@ const PropertyDetails = () => {
               />
 
               <Box mt="15px">
-                <Typography fontSize={18} fontWeight={600} color="#11142D">{propertyDetails.creator.name}</Typography>
+                <Typography fontSize={18} fontWeight={600} color="#11142D">{stockDetails.creator.name}</Typography>
                 <Typography mt="5px" fontSize={14} fontWeight={400} color="#808191">Agent</Typography>
               </Box>
 
@@ -132,7 +132,7 @@ const PropertyDetails = () => {
                 <Typography fontSize={14} fontWeight={400} color="#808191">Meet Ghamr - Egypt</Typography>
               </Stack>
 
-              <Typography mt={1} fontSize={16} fontWeight={600} color="#11142D">{propertyDetails.creator.allProperties.length} Properties</Typography>
+              <Typography mt={1} fontSize={16} fontWeight={600} color="#11142D">{stockDetails.creator.allStocks.length} Stocks</Typography>
             </Stack>
 
             <Stack width="100%" mt="25px" direction="row" flexWrap="wrap" gap={2}>
@@ -144,7 +144,7 @@ const PropertyDetails = () => {
                 icon={!isCurrentUser ? <ChatBubble /> : <Edit />}
                 handleClick={() => {
                   if (isCurrentUser) {
-                    navigate(`/properties/edit/${propertyDetails._id}`);
+                    navigate(`/stocks/edit/${stockDetails._id}`);
                   }
                 }}
               />
@@ -155,20 +155,21 @@ const PropertyDetails = () => {
                 fullWidth
                 icon={!isCurrentUser ? <Phone /> : <Delete />}
                 handleClick={() => {
-                  if (isCurrentUser) handleDeleteProperty();
+                  if (isCurrentUser) handleDeleteStock();
                 }}
               />
             </Stack>
           </Stack>
-
           <Stack>
             <img
               src="https://serpmedia.org/scigen/images/googlemaps-nyc-standard.png?crc=3787557525"
               width="100%"
               height={306}
               style={{ borderRadius: 10, objectFit: 'cover' }}
+              alt="" 
             />
           </Stack>
+
 
           <Box>
             <CustomButton
@@ -184,4 +185,4 @@ const PropertyDetails = () => {
   );
 };
 
-export default PropertyDetails;
+export default StockDetails;

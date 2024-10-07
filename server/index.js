@@ -4,12 +4,15 @@ import cors from 'cors';
 
 import connectDB from './mongodb/connect.js';
 import userRouter from './routes/user.routes.js';
-import propertyRouter from './routes/property.routes.js';
+import stockRouter from './routes/stock.routes.js';
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // Ganti dengan URL aplikasi kamu
+  credentials: true
+}));
 app.use(express.json({ limit: '50mb' }));
 
 app.get('/', (req, res) => {
@@ -17,7 +20,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/properties', propertyRouter);
+app.use('/api/v1/stocks', stockRouter);
 
 const startServer = async () => {
   try {

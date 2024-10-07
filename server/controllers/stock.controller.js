@@ -1,4 +1,4 @@
-import Property from '../mongodb/models/property.js';
+import Property from '../mongodb/models/stock.js';
 import User from '../mongodb/models/user.js';
 
 import mongoose from 'mongoose';
@@ -13,13 +13,13 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const getAllProperties = async (req, res) => {
-  const { _end, _order, _start, _sort, title_like = "", propertyType = "" } = req.query;
+const getAllStocks = async (req, res) => {
+  const { _end, _order, _start, _sort, title_like = "", category = "" } = req.query;
 
   const query = {};
 
-  if(propertyType !== '') {
-    query.propertyType = propertyType;
+  if(category !== '') {
+    query.category = category;
   }
 
   if(title_like) {
@@ -27,9 +27,9 @@ const getAllProperties = async (req, res) => {
   }
 
   try {
-    const count = await Property.countDocuments({ query });
+    const count = await Stock.countDocuments({ query });
 
-    const properties = await Property
+    const stocks = await Stock
       .find(query)
       .limit(_end)
       .skip(_start)
@@ -38,26 +38,26 @@ const getAllProperties = async (req, res) => {
     res.header('x-total-count', count);
     res.header('Access-Control-Expose-Headers', 'x-total-count');
 
-    res.status(200).json(properties);
+    res.status(200).json(stocks);
   } catch (error) {
     res.status(500).json({ message: error.message }) 
   }
 };
 
-const getPropertyDetail = async (req, res) => {
+const getStockDetail = async (req, res) => {
   const { id } = req.params;
-  const propertyExists = await Property.findOne({ _id: id }).populate('creator');
+  const stockExists = await Stock.findOne({ _id: id }).populate('creator');
 
-  if(propertyExists) {
-    res.status(200).json(propertyExists) 
+  if(stockExists) {
+    res.status(200).json(stockExists) 
   } else {
-    res.status(404).json({ message: 'Property not found' });
+    res.status(404).json({ message: 'Stock not found' });
   }
 };
 
-const createProperty = async (req, res) => {
+const createStock = async (req, res) => {
   try {
-    const { title, description, propertyType, location, price, photo, email } = req.body;
+    const { kode, item, description, category, location, actual, photo, email } = req.body;
   
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -69,76 +69,78 @@ const createProperty = async (req, res) => {
     const photoUrl = await cloudinary.uploader.upload(photo);
   
     const newProperty = await Property.create({
-      title,
+      kode,
+      item,
       description,
-      propertyType,
+      category,
       location,
-      price,
+      actual,
       photo: photoUrl.url,
       creator: user._id
     });
   
-    user.allProperties.push(newProperty._id);
+    user.allStocks.push(newProperty._id);
     await user.save({ session });
   
     await session.commitTransaction();
   
-    res.status(200).json({ message: 'Property created successfully' });
+    res.status(200).json({ message: 'Stock created successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message }) 
   }
 };
 
-const updateProperty = async (req, res) => {
+const updateStock = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, propertyType, location, price, photo } = req.body;
+    const { kode, item, description, category, location, actual, photo } = req.body;
 
     const photoUrl = await cloudinary.uploader.upload(photo);
 
     await Property.findByIdAndUpdate({ _id: id}, {
-      title,
+      kode,
+      item,
       description,
-      propertyType,
+      category,
       location,
-      price,
+      actual,
       photo: photoUrl.url || photo
     })
 
-    res.status(200).json({ message: 'Property updated successfully' })
+    res.status(200).json({ message: 'Stock updated successfully' })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 };
 
 
-const deleteProperty = async (req, res) => {
+const deleteStock = async (req, res) => {
   try {
     const { id } = req.params;
     
-    const propertyToDelete = await Property.findById({ _id: id}).populate('creator');
+    const stockToDelete = await Property.findById({ _id: id}).populate('creator');
 
-    if(!propertyToDelete) throw new Error('Property not found');
+    if(!stockToDelete) throw new Error('Stock not found');
 
     const session = await mongoose.startSession();
     session.startTransaction();
     
-    propertyToDelete.remove({session});
-    propertyToDelete.creator.allProperties.pull(propertyToDelete);
+    stockToDelete.remove({session});
+    stockToDelete.creator.allProperties.pull(stockToDelete);
 
-    await propertyToDelete.creator.save({session});
+    await stockToDelete.creator.save({session});
     await session.commitTransaction();
 
-      res.status(200).json({ message: 'Property deleted successfully' });
+      res.status(200).json({ message: 'Stock deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 };
 
 export {
-  getAllProperties,
-  getPropertyDetail,
-  createProperty,
-  updateProperty,
-  deleteProperty,
+  getAllStocks,
+  getStockDetail,
+  createStock,
+  updateStock,
+  deleteStock,
 }

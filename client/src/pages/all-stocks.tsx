@@ -4,9 +4,9 @@ import { Box, Stack, Typography, TextField, Select, MenuItem } from '@pankod/ref
 import { useNavigate } from '@pankod/refine-react-router-v6';
 import { useMemo } from 'react';
 
-import { PropertyCard, CustomButton } from 'components';
+import { StockCard, CustomButton } from 'components';
 
-const AllProperties = () => {
+const AllStocks = () => {
   const navigate = useNavigate();
 
   const {
@@ -19,20 +19,20 @@ const AllProperties = () => {
     filters, setFilters,
   } = useTable();
 
-  const allProperties = data?.data ?? [];
+  const allStocks = data?.data ?? [];
 
-  const currentPrice = sorter.find((item) => item.field === 'price')?.order;
+  const currentActual = sorter.find((item) => item.field === 'actual')?.order;
 
   const toggleSort = (field: string) => {
-    setSorter([{ field, order: currentPrice === 'asc' ? 'desc' : 'asc'}])
+    setSorter([{ field, order: currentActual === 'asc' ? 'desc' : 'asc'}])
   }
 
   const currentFilterValues = useMemo(() => {
     const logicalFilters = filters.flatMap((item) => ('field' in item ? item : []));
 
     return {
-      title: logicalFilters.find((item) => item.field === 'title')?.value || '',
-      propertyType: logicalFilters.find((item) => item.field === 'propertyType')?.value || '',
+      item: logicalFilters.find((item) => item.field === 'item')?.value || '',
+      category: logicalFilters.find((item) => item.field === 'category')?.value || '',
     }
   }, [filters])
 
@@ -44,24 +44,24 @@ const AllProperties = () => {
       <Box mt="20px" sx={{display: 'flex', flexWrap: 'wrap', gap: 3}}>
         <Stack direction="column" width="100%">
           <Typography fontSize={25} fontWeight={700} color="#11142d">
-            {!allProperties.length ?'There are no properties' : 'All Properties'}</Typography>
+            {!allStocks.length ?'There are no stocks' : 'All Stocks'}</Typography>
             <Box mb={2} mt={3} display="flex" width="84%" justifyContent="space-between" flexWrap="wrap">
               <Box display="flex" gap={2} flexWrap="wrap" mb={{ xs: '20px', sm: 0 }}>
                 <CustomButton 
-                  title={`Sort price ${currentPrice === 'asc' ? '↑' : '↓'}`}
-                  handleClick={() => toggleSort('price')}
+                  title={`Sort actual ${currentActual === 'asc' ? '↑' : '↓'}`}
+                  handleClick={() => toggleSort('actual')}
                   backgroundColor="#475be8"
                   color="#fcfcfc"
                 />
                 <TextField 
                   variant="outlined"
                   color="info"
-                  placeholder="Search by title"
-                  value={currentFilterValues.title}
+                  placeholder="Search by Item"
+                  value={currentFilterValues.item}
                   onChange={(e) => {
                     setFilters([
                       {
-                        field: 'title',
+                        field: 'item',
                         operator: 'contains',
                         value: e.currentTarget.value ? e.currentTarget.value : undefined
                       }
@@ -75,11 +75,11 @@ const AllProperties = () => {
                   required
                   inputProps={{ 'aria-label': 'Without label' }}
                   defaultValue=""
-                  value={currentFilterValues.propertyType}
+                  value={currentFilterValues.category}
                   onChange={(e) => {
                     setFilters([
                       {
-                        field: 'propertyType',
+                        field: 'category',
                         operator: 'eq',
                         value: e.target.value
                       }
@@ -100,8 +100,8 @@ const AllProperties = () => {
 
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <CustomButton 
-          title="Add Property"
-          handleClick={() => navigate('/properties/create')}
+          title="Add Stock"
+          handleClick={() => navigate('/stocks/create')}
           backgroundColor="#475be8"
           color="#fcfcfc"
           icon={<Add />}
@@ -109,19 +109,20 @@ const AllProperties = () => {
       </Stack>
     
       <Box mt="20px" sx={{display: 'flex', flexWrap: 'wrap', gap:3}}>
-        {allProperties?.map((property) => (
-          <PropertyCard
-            key={property._id}
-            id={property._id}
-            title={property.title}
-            location={property.location}
-            price={property.price}
-            photo={property.photo}
+        {allStocks?.map((stock) => (
+          <StockCard
+            key={stock._id}
+            id={stock._id}
+            kode={stock.kode}
+            item={stock.item}
+            location={stock.location}
+            actual={stock.actual}
+            photo={stock.photo}
           />
         ))}
       </Box>
 
-      {allProperties.length > 0  && (
+      {allStocks.length > 0  && (
         <Box display="flex" gap={2} mt={3} flexWrap="wrap">
           <CustomButton 
             title="Previous"
@@ -159,4 +160,4 @@ const AllProperties = () => {
   )
 }
 
-export default AllProperties
+export default AllStocks

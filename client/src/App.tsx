@@ -30,11 +30,11 @@ import {
   Home,
   Agents,
   MyProfile,
-  PropertyDetails,
-  AllProperties,
-  CreateProperty,
+  StockDetails,
+  AllStocks,
+  CreateStock,
   AgentProfile,
-  EditProperty,
+  EditStock,
 } from "pages";
 
 const axiosInstance = axios.create();
@@ -131,11 +131,11 @@ function App() {
           catchAll={<ErrorComponent />}
           resources={[
             {
-              name: "properties",
-              list: AllProperties,
-              show: PropertyDetails,
-              create: CreateProperty,
-              edit: EditProperty,
+              name: "stocks",
+              list: AllStocks,
+              show: StockDetails,
+              create: CreateStock,
+              edit: EditStock,
               icon: <VillaOutlined />,
             },
             {

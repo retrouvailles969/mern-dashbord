@@ -1,21 +1,21 @@
 import AgentProfile from './agent-profile';
 import Agents from './agent';
-import AllProperties from './all-properties';
-import CreateProperty from './create-property';
+import AllStocks from './all-stocks';
+import CreateStock from './all-stocks';
 import Home from './home';
 import { Login } from './login';
 import MyProfile from './my-profile';
-import PropertyDetails from './property-details';
-import EditProperty from './edit-property';
+import StockDetails from './stock-details';
+import EditStock from './edit-stock';
 
 export {
   AgentProfile,
   Agents,
-  AllProperties,
-  CreateProperty,
+  AllStocks,
+  CreateStock,
   Home,
   Login,
   MyProfile,
-  PropertyDetails,
-  EditProperty,
+  StockDetails,
+  EditStock,
 };

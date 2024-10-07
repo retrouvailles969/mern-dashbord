@@ -1,5 +1,4 @@
-import { useGetIdentity, useOne } from "@pankod/refine-core"
-
+import { useGetIdentity, useOne } from "@pankod/refine-core";
 import { Profile } from 'components';
 
 const MyProfile = () => {
@@ -7,22 +6,23 @@ const MyProfile = () => {
   const { data, isLoading, isError } = useOne({
     resource: 'users',
     id: user?.userid,
-  })
+  });
 
-  const myProfile = data?.data ?? [];
+  // Gunakan objek kosong {} sebagai fallback, bukan array
+  const myProfile = data?.data ?? {};
 
-  if(isLoading) return <div>loading...</div>
-  if(isError) return <div>error...</div>
+  if (isLoading) return <div>loading...</div>;
+  if (isError) return <div>error...</div>;
 
   return (
     <Profile
       type="My"
-      name={myProfile.name}
-      email={myProfile.email}
-      avatar={myProfile.avatar}
-      properties={myProfile.allProperties}
+      name={myProfile?.name || "Unknown"} // Default jika tidak ada name
+      email={myProfile?.email || "No email"} // Default jika tidak ada email
+      avatar={myProfile?.avatar || "default-avatar-url"} // Default jika tidak ada avatar
+      stocks={myProfile?.allStocks || []} // Default ke array kosong jika tidak ada stocks
     />
-  )
-}
+  );
+};
 
-export default MyProfile
+export default MyProfile;

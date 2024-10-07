@@ -1,11 +1,11 @@
 import { useList } from '@pankod/refine-core';
 import { Typography, Box, Stack } from '@pankod/refine-mui';
 
-import { PieChart, PropertyReferrals, TotalRevenue, PropertyCard } from 'components';
+import { PieChart, StockReferrals, TotalRevenue, StockCard } from 'components';
 
 const Home = () => {
   const { data, isLoading, isError } = useList({
-    resource: 'properties',
+    resource: 'stocks',
     config: {
       pagination: {
         pageSize: 4
@@ -13,7 +13,7 @@ const Home = () => {
     }
   })
 
-  const latestProperties = data?.data ?? [];
+  const latestStocks = data?.data ?? [];
 
   if(isLoading) return <Typography>Loading...</Typography>
   if(isError) return <Typography>Something went wrong!</Typography>
@@ -26,13 +26,13 @@ const Home = () => {
 
       <Box mt="20px" display="flex" flexWrap="wrap" gap={4}>
         <PieChart 
-          title="Properties for Sale"
+          title="Stocks for Sale"
           value={684}
           series={[75, 25]}
           colors={['#275be8', '#c4e8ef']}
         />
         <PieChart 
-          title="Properties for Rent"
+          title="Stocks for Rent"
           value={550}
           series={[60, 40]}
           colors={['#275be8', '#c4e8ef']}
@@ -44,7 +44,7 @@ const Home = () => {
           colors={['#275be8', '#c4e8ef']}
         />
         <PieChart 
-          title="Properties for Cities"
+          title="Stocks for Cities"
           value={555}
           series={[75, 25]}
           colors={['#275be8', '#c4e8ef']}
@@ -53,7 +53,7 @@ const Home = () => {
 
       <Stack mt="25px" width="100%" direction={{ xs: 'column', lg: 'row' }} gap={4}>
         <TotalRevenue />
-        <PropertyReferrals />
+        <StockReferrals />
       </Stack>
 
       <Box
@@ -66,18 +66,19 @@ const Home = () => {
         minWidth="100%"
         mt="25px"
       >
-        <Typography fontSize="18px" fontWeight={600} color="#11142d">Latest Properties</Typography>
+        <Typography fontSize="18px" fontWeight={600} color="#11142d">Latest Stocks</Typography>
 
         <Box mt={2.5} sx={{ display: 'flex', flexWrap: 'wrap', gap: 4}}>
-          {latestProperties.map((property) => (
-            <PropertyCard 
-              key={property._id}
-              id={property._id}
-              title={property.title}
-              location={property.location}
-              price={property.price}
-              photo={property.photo}
-            />
+          {latestStocks.map((stock) => (
+            <StockCard
+            key={stock._id}
+            id={stock._id}
+            kode={stock.kode}
+            item={stock.item}
+            location={stock.location}
+            actual={stock.actual}
+            photo={stock.photo}
+          />
           ))}
         </Box>
       </Box>

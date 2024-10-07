@@ -4,9 +4,9 @@ import { FieldValues, useForm } from '@pankod/refine-react-hook-form';
 
 import Form from 'components/common/Form';
 
-const CreateProperty = () => {
+const CreateStock = () => {
   const { data: user } = useGetIdentity();
-  const [propertyImage, setPropertyImage] = useState({ name: '', url: '' });
+  const [stockImage, setStockImage] = useState({ name: '', url: '' });
   const { refineCore: { onFinish, formLoading }, register, handleSubmit } = useForm();
 
   const handleImageChange = (file: File) => {
@@ -16,13 +16,13 @@ const CreateProperty = () => {
       fileReader.readAsDataURL(readFile);
     });
 
-    reader(file).then((result: string) => setPropertyImage({ name: file?.name, url: result }));
+    reader(file).then((result: string) => setStockImage({ name: file?.name, url: result }));
   };
   
   const onFinishHandler = async (data: FieldValues) => {
-    if(!propertyImage.name) return alert('Please select an image');
+    if(!stockImage.name) return alert('Please select an image');
     
-    await onFinish({ ...data, photo: propertyImage.url, email: user.email })
+    await onFinish({ ...data, photo: stockImage.url, email: user.email })
   };
 
   return (
@@ -34,8 +34,8 @@ const CreateProperty = () => {
       handleSubmit={handleSubmit}
       handleImageChange={handleImageChange}
       onFinishHandler={onFinishHandler}
-      propertyImage={propertyImage}
+      stockImage={stockImage}
     />
   )
 }
-export default CreateProperty
+export default CreateStock

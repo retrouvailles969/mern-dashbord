@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import { FormValues } from 'interfaces/property';
+import { FormValues } from 'interfaces/stock';
 
 export const validateForm = (formValues: FormValues) => {
   const errors: { message: string } = { message: '' };
@@ -7,12 +7,19 @@ export const validateForm = (formValues: FormValues) => {
 
   Object.keys(formValues).forEach((key) => {
     switch (key) {
-      case 'title':
-        if (!formValues.title) {
-          errors.message = 'Title is required';
+      case 'kode':
+        if (!formValues.kode) {
+          errors.message = 'Kode Item is required';
           hasError = true;
         }
         break;
+
+        case 'item':
+          if (!formValues.item) {
+            errors.message = 'Item Name is required';
+            hasError = true;
+          }
+          break;
 
       case 'description':
         if (!formValues.description) {
@@ -21,9 +28,9 @@ export const validateForm = (formValues: FormValues) => {
         }
         break;
 
-      case 'propertyType':
-        if (!formValues.propertyType) {
-          errors.message = 'Property type is required';
+      case 'category':
+        if (!formValues.category) {
+          errors.message = 'Category is required';
           hasError = true;
         }
         break;
@@ -35,9 +42,9 @@ export const validateForm = (formValues: FormValues) => {
         }
         break;
 
-      case 'price':
-        if (!formValues.price) {
-          errors.message = 'Price is required';
+      case 'actual':
+        if (!formValues.actual) {
+          errors.message = 'Actual Stock is required';
           hasError = true;
         }
         break;
